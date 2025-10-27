@@ -1,0 +1,18 @@
+{
+  "name": "lab2at",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "chai": "^6.2.0",
+    "eslint": "^9.38.0",
+    "mocha": "^11.7.4",
+    "nyc": "^17.1.0"
+  }
+}
