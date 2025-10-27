@@ -1,34 +1,51 @@
 export default class Matrix {
   constructor(data) {
+    if (!Array.isArray(data) || !Array.isArray(data[0])) {
+      throw new Error('Matrix data must be a 2D array');
+    }
     this.data = data;
+    this.rows = data.length;
+    this.cols = data[0].length;
   }
 
   add(other) {
-    return new Matrix(
-      this.data.map((row, i) =>
-        row.map((val, j) => val + other.data[i][j])
-      )
+    if (this.rows !== other.rows || this.cols !== other.cols) {
+      throw new Error('Matrix dimensions must match for addition');
+    }
+
+    const result = Array.from({ length: this.rows }, (_, i) =>
+      Array.from({ length: this.cols }, (_, j) => this.data[i][j] + other.data[i][j])
     );
+
+    return new Matrix(result);
   }
 
   multiply(other) {
-    const rows = this.data.length;
-    const cols = other.data[0].length;
-    const result = Array.from({ length: rows }, () => Array(cols).fill(0));
+    if (this.cols !== other.rows) {
+      throw new Error('Number of columns in A must equal number of rows in B');
+    }
 
-    for (let i = 0; i < rows; i++) {
-      for (let j = 0; j < cols; j++) {
-        for (let k = 0; k < other.data.length; k++) {
-          result[i][j] += this.data[i][k] * other.data[k][j];
+    const result = Array.from({ length: this.rows }, () => Array(other.cols).fill(0));
+    const bT = other.transpose().data; // транспонуємо B для швидшого доступу до колонок
+
+    for (let i = 0; i < this.rows; i++) {
+      const rowA = this.data[i];
+      for (let j = 0; j < other.cols; j++) {
+        const colB = bT[j];
+        let sum = 0;
+        for (let k = 0; k < this.cols; k++) {
+          sum += rowA[k] * colB[k];
         }
+        result[i][j] = sum;
       }
     }
+
     return new Matrix(result);
   }
 
   transpose() {
-    const result = this.data[0].map((_, i) =>
-      this.data.map(row => row[i])
+    const result = Array.from({ length: this.cols }, (_, i) =>
+      Array.from({ length: this.rows }, (_, j) => this.data[j][i])
     );
     return new Matrix(result);
   }
