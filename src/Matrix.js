@@ -26,7 +26,7 @@ export default class Matrix {
     }
 
     const result = Array.from({ length: this.rows }, () => Array(other.cols).fill(0));
-    const bT = other.transpose().data; // транспонуємо B для швидшого доступу до колонок
+    const bT = other.transpose().data; 
 
     for (let i = 0; i < this.rows; i++) {
       const rowA = this.data[i];
